@@ -18,8 +18,14 @@ libft:
 $(NAME_SERVER): libft $(OBJS_SERVER)
 		@$(CC) -o $(NAME_SERVER) $(CFLAGS) $(INCLUDE) $(LIB) $(OBJS_SERVER)
 
+server_san: libft $(OBJS_SERVER)
+		@$(CC) -fsanitize=address -o $(NAME_SERVER) $(CFLAGS) $(INCLUDE) $(LIB) $(OBJS_SERVER)
+
 $(NAME_CLIENT):	libft $(OBJS_CLIENT)
 		@$(CC) -o $(NAME_CLIENT) $(CFLAGS) $(INCLUDE) $(LIB) $(OBJS_CLIENT)
+
+client_san:	libft $(OBJS_CLIENT)
+		@$(CC) -fsanitize=address -o $(NAME_CLIENT) $(CFLAGS) $(INCLUDE) $(LIB) $(OBJS_CLIENT)
 
 .c.o:
 			@echo "Creating object: $@"
