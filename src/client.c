@@ -51,20 +51,28 @@ int	main(int argc, char *argv[])
 
 int	stringToBinary(int server_pid, char *s)
 {
-	//int		i;
-	int		j;
+	int		i;
 	int		len;
 	char	ch;
 
-	//i = 0;
-	j = 7;
+	i = 0;
 	if (s == NULL)
 		return (0);
 	len = strlen(s);
-	while (*s)
+	while (i <= len)
 	{
-		ch = *s++;
-		while (j >= 0)
+		ch = s[i++];
+		sendsig(server_pid, ch);
+	}
+	return (1);
+}
+
+static void	sendsig(int server_pid, char ch)
+{
+	int j;
+
+	j = 7
+	while (j >= 0)
 		{
 			if (ch & (1 << j--))
 			{
@@ -77,7 +85,4 @@ int	stringToBinary(int server_pid, char *s)
 			pause();
 			usleep(1);
 		}
-		j = 7;
-	}
-	return (1);
 }
