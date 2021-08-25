@@ -19,14 +19,11 @@
 typedef struct s_data
 {
 	unsigned char	bits;
-	unsigned char	counter;
-	int				client_pid;
+	unsigned int	counter;
 }				t_data;
 
-void	ft_signactyes(int sig, siginfo_t *info, void *ucontext);
-void	ft_signactno(int sig, siginfo_t *info, void *ucontext);
-void	ft_printchar(void);
-void	ft_signactend(int sig, siginfo_t *info, void *ucontext);
+void	ft_sigreceived(int sig, siginfo_t *info, void *ucontext);
+void	ft_printchar(char bits);
 int		stringToBinary(int server_pid, char *s);
 
 #endif

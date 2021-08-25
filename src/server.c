@@ -18,68 +18,55 @@ t_data	g_data;
 
 int	main(void)
 {
-	struct sigaction	sigactyes;
-	struct sigaction	sigactno;
+	struct sigaction	sig;
+	sigset_t			ss;
 
 	ft_putstr_fd("Server PID: ", 1);
-	ft_putstr_fd(ft_itoa(getpid()), 1);
+	ft_putnbr_fd(getpid(), 1);
 	ft_putstr_fd("\n", 1);
-	g_data.bits = 0b00000000;
+	g_data.bits = 0;
 	g_data.counter = 0;
-	sigactyes.sa_sigaction = &ft_signactyes;
-	sigactno.sa_sigaction = &ft_signactno;
-	sigactyes.sa_flags = SA_SIGINFO;
-	sigactno.sa_flags = SA_SIGINFO;
-	sigaction(SIGUSR1, &sigactyes, NULL);
-	sigaction(SIGUSR2, &sigactno, NULL);
+	if (sigemptyset(&ss) == -1)
+		return(1);
+	sigaddset(&ss, SIGINT);
+	sigaddset(&ss, SIGQUIT);
+	sig.sa_handler = 0;
+	sig.sa_sigaction = ft_sigreceived;
+	sig.sa_flags = SA_SIGINFO;
+	sig.sa_mask = ss;
+	sigaction(SIGUSR1, &sig, NULL);
+	sigaction(SIGUSR2, &sig, NULL);
 	while (1)
 		pause();
 	return (0);
 }
 
-void	ft_signactyes(int sig, siginfo_t *info, void *ucontext)
+void	ft_sigreceived(int sig, siginfo_t *info, void *ucontext)
 {
+	static char bits = 0;
+	static int counter = 0;
+
 	(void)ucontext;
-	(void)sig;
-	g_data.bits |= 0b00000001;
-	if (!g_data.client_pid)
-		g_data.client_pid = info->si_pid;
-	kill(g_data.client_pid, SIGUSR2);
-	if (g_data.counter == 7)
-		ft_printchar();
+	if (sig == SIGUSR1)
+		bits |= 0b00000001;
+	if (counter >= 7)
+	{
+		ft_printchar(bits);
+		bits = 0;
+		counter = 0;
+	}
 	else
 	{
-		g_data.bits = g_data.bits << 1;
-		g_data.counter++;
+		bits = bits << 1;
+		counter++;
 	}
+	usleep(1);
+	kill(info->si_pid, SIGUSR1);
 }
 
-void	ft_signactno(int sig, siginfo_t *info, void *ucontext)
+void	ft_printchar(char bits)
 {
-	(void)ucontext;
-	(void)sig;
-	if (!g_data.client_pid)
-		g_data.client_pid = info->si_pid;
-	kill(g_data.client_pid, SIGUSR2);
-	if (g_data.counter == 7)
-		ft_printchar();
-	else
-	{
-		g_data.bits = g_data.bits << 1;
-		g_data.counter++;
-	}
-}
-
-void	ft_printchar(void)
-{
-	ft_putchar_fd(g_data.bits, 1);
-	//usleep(10);
-	if (!g_data.bits)
-	{
+	ft_putchar_fd(bits, 1);
+	if (!bits)
 		ft_putchar_fd('\n', 1);
-		kill(g_data.client_pid, SIGUSR1);
-		g_data.client_pid = 0;
-	}
-	g_data.counter = 0;
-	g_data.bits = 0b00000000;
 }
