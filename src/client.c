@@ -6,7 +6,7 @@
 /*   By: lprates <lprates@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/08 17:56:29 by lprates           #+#    #+#             */
-/*   Updated: 2021/08/21 17:36:34 by lprates          ###   ########.fr       */
+/*   Updated: 2021/09/04 04:10:52 by lprates          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,27 @@ int	main(int argc, char *argv[])
 	return (0);
 }
 
+static int	sendsig(int server_pid, char ch)
+{
+	int j;
+
+	j = 7;
+	while (j >= 0)
+	{
+		if (ch & (1 << j--))
+		{
+			if (kill(server_pid, SIGUSR1) == -1)
+				return (0);
+		}
+		else
+			if (kill(server_pid, SIGUSR2) == -1)
+				return (0);
+		pause();
+		usleep(10);
+	}
+	return (1);
+}
+
 int	stringToBinary(int server_pid, char *s)
 {
 	int		i;
@@ -62,27 +83,8 @@ int	stringToBinary(int server_pid, char *s)
 	while (i <= len)
 	{
 		ch = s[i++];
-		sendsig(server_pid, ch);
+		if (!sendsig(server_pid, ch))
+			return (0);
 	}
 	return (1);
-}
-
-static void	sendsig(int server_pid, char ch)
-{
-	int j;
-
-	j = 7
-	while (j >= 0)
-		{
-			if (ch & (1 << j--))
-			{
-				if (kill(server_pid, SIGUSR1) == -1)
-					return (0);
-			}
-			else
-				if (kill(server_pid, SIGUSR2) == -1)
-					return (0);
-			pause();
-			usleep(1);
-		}
 }

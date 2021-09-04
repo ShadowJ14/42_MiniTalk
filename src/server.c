@@ -6,7 +6,7 @@
 /*   By: lprates <lprates@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/08 15:55:52 by lprates           #+#    #+#             */
-/*   Updated: 2021/08/21 17:36:35 by lprates          ###   ########.fr       */
+/*   Updated: 2021/09/04 04:12:49 by lprates          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ void	ft_sigreceived(int sig, siginfo_t *info, void *ucontext)
 		bits = bits << 1;
 		counter++;
 	}
-	usleep(1);
+	usleep(10);
 	kill(info->si_pid, SIGUSR1);
 }
 
