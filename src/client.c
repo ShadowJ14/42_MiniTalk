@@ -6,7 +6,7 @@
 /*   By: lprates <lprates@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/08 17:56:29 by lprates           #+#    #+#             */
-/*   Updated: 2021/09/04 04:10:52 by lprates          ###   ########.fr       */
+/*   Updated: 2021/09/04 04:30:17 by lprates          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ static int	check_pid(const char *str)
 	return (!*str);
 }
 
-static void receive_handler(int sig)
+static void	receive_handler(int sig)
 {
 	if (sig == SIGUSR2)
 	{
@@ -44,14 +44,14 @@ int	main(int argc, char *argv[])
 	ft_putstr_fd(argv[2], 1);
 	signal(SIGUSR1, receive_handler);
 	signal(SIGUSR2, receive_handler);
-	if(!stringToBinary(server_pid, argv[2]))
+	if (!stringToBinary(server_pid, argv[2]))
 		return (3);
 	return (0);
 }
 
 static int	sendsig(int server_pid, char ch)
 {
-	int j;
+	int	j;
 
 	j = 7;
 	while (j >= 0)

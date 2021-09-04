@@ -6,7 +6,7 @@
 /*   By: lprates <lprates@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/08 15:55:52 by lprates           #+#    #+#             */
-/*   Updated: 2021/09/04 04:12:49 by lprates          ###   ########.fr       */
+/*   Updated: 2021/09/04 04:30:46 by lprates          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ int	main(void)
 	g_data.bits = 0;
 	g_data.counter = 0;
 	if (sigemptyset(&ss) == -1)
-		return(1);
+		return (1);
 	sigaddset(&ss, SIGINT);
 	sigaddset(&ss, SIGQUIT);
 	sig.sa_handler = 0;
@@ -43,8 +43,8 @@ int	main(void)
 
 void	ft_sigreceived(int sig, siginfo_t *info, void *ucontext)
 {
-	static char bits = 0;
-	static int counter = 0;
+	static char	bits = 0;
+	static int	counter = 0;
 
 	(void)ucontext;
 	if (sig == SIGUSR1)
